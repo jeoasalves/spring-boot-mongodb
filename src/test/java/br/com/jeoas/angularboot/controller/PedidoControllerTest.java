@@ -1,33 +1,43 @@
 package br.com.jeoas.angularboot.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import br.com.jeoas.angularboot.document.Pedido;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@WebMvcTest(PedidoController.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PedidoControllerTest {
 
 	@Autowired
-    private MockMvc mvc;
+	private TestRestTemplate restTemplate;
+	
+	@LocalServerPort
+	private int port;
+	
+	@TestConfiguration
+	static class Config{
+		@Bean
+		public RestTemplateBuilder restTemplateBuilder() {
+			return new RestTemplateBuilder().basicAuthentication("", "");
+		} 
+	}
+	
 	
     @Test
-    public void givenClientes_whenGetClientes_thenReturnJsonArray()
-      throws Exception {
-        mvc.perform(MockMvcRequestBuilders
-        	      .get("localhost:8080/clientes")
-        	      .accept(MediaType.APPLICATION_JSON))
-        	      .andDo(print())
-        	      .andExpect(status().isOk());
+    public void testarConsultaPorCodigoPedidoComSucesso() {
+    	ResponseEntity<Pedido>  resultado = restTemplate.getForEntity("/pedidos/v2/5050639782", Pedido.class);
+    	assertEquals(resultado.getBody().getCodigoPedido(), "5050639782");
     }
 }
