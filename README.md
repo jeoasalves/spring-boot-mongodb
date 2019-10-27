@@ -1,2 +1,1 @@
-# spring_boot_mongodb
-Spring Boot and Mongodb
+spring_boot_app
