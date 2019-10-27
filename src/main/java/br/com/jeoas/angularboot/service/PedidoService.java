@@ -1,11 +1,8 @@
 package br.com.jeoas.angularboot.service;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import br.com.jeoas.angularboot.document.Pedido;
@@ -18,8 +15,9 @@ public class PedidoService {
 	@Autowired
 	PedidoRepository pedidoRepository;
 
-	public Collection<Pedido> listar() {
-		return pedidoRepository.findAll();
+	public Page<Pedido> listar(int page, 
+			  int size) {
+		return pedidoRepository.findAll(PageRequest.of(page, size));
 	}
 
 	public Pedido consultar(String codigoPedido) throws PedidoNaoEncontradoException {

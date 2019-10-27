@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jeoas.angularboot.document.Pedido;
@@ -27,14 +29,17 @@ public class PedidoController {
 	@Autowired
 	private PedidoService pedidoService;
 	
-	@GetMapping
-	public ResponseEntity<Collection<Pedido>> listar() {
+	@GetMapping(value = "/", params = { "page", "size" })
+	public ResponseEntity<Page<Pedido>> listar(@RequestParam("page") int page, 
+			  @RequestParam("size") int size) {
+		
 		log.info("Retornando lista.");
-		Collection<Pedido> pedidos = pedidoService.listar();
-		return new ResponseEntity<Collection<Pedido>>(pedidos, OK);
+		Page<Pedido> pedidos = pedidoService.listar(page, size);
+		
+		return new ResponseEntity<Page<Pedido>>(pedidos, OK);
 	}
 
-	@GetMapping(value = "/{codigoPedido}")
+	@GetMapping(value = "/v2/{codigoPedido}")
 	public ResponseEntity<Pedido> consultar(@PathVariable String codigoPedido) {
 		log.info("consultando pedido");
 
