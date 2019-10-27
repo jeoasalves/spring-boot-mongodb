@@ -3,32 +3,29 @@ package br.com.jeoas.angularboot.document;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.EqualsAndHashCode.Include;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = "credenciamento")
 @Document(collection = "pedidos")
 public class Pedido {
 
 	@Id
 	private String id;
+	
+	@Include
 	private String codigoPedido;
 	private String situacao;
 	
-	//private Credenciamento credenciamento;
 	private Credenciamento credenciamento;
-	
-	public Pedido() {
-	}
-
-	public Pedido(String id, String codigoPedido, String situacao, Credenciamento credenciamento) {
-		super();
-		this.id = id;
-		this.codigoPedido = codigoPedido;
-		this.situacao = situacao;
-		this.credenciamento = credenciamento;
-	}
 	
 	public Pedido(String codigoPedido, String situacao, Credenciamento credenciamento) {
 		super();
