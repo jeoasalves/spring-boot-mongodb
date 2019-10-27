@@ -1,0 +1,63 @@
+package br.com.jeoas.angularboot.service;
+
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
+import org.springframework.stereotype.Service;
+
+import br.com.jeoas.angularboot.document.Pedido;
+import br.com.jeoas.angularboot.exception.PedidoNaoEncontradoException;
+import br.com.jeoas.angularboot.repository.PedidoRepository;
+
+@Service
+public class PedidoService {
+
+	@Autowired
+	PedidoRepository pedidoRepository;
+
+	public Collection<Pedido> listar() {
+		return pedidoRepository.findAll();
+	}
+
+	public Pedido consultar(String codigoPedido) throws PedidoNaoEncontradoException {
+		Pedido pedido = pedidoRepository.findByCodigoPedido(codigoPedido);
+
+		if (pedido != null) {
+			return pedido;
+		}
+
+		throw new PedidoNaoEncontradoException(codigoPedido);
+	}
+
+	public Pedido salvar(Pedido pedido) {
+		pedido = pedidoRepository.save(pedido);
+
+		return pedido;
+	}
+
+	public void remover(String codigoPedido) throws PedidoNaoEncontradoException {
+		Pedido pedido = pedidoRepository.findByCodigoPedido(codigoPedido);
+		if (pedido != null) {
+			pedidoRepository.deleteById(pedido.getId());
+		} else {
+			throw new PedidoNaoEncontradoException(codigoPedido); 
+		}
+	}
+
+	public Pedido atualizar(Pedido pedido) throws PedidoNaoEncontradoException {
+		Pedido pedidoBanco = pedidoRepository.findByCodigoPedido(pedido.getCodigoPedido());
+
+		if (pedidoBanco != null) {
+			pedidoBanco.setSituacao(pedido.getSituacao());
+			pedidoBanco = pedidoRepository.save(pedidoBanco);
+
+			return pedidoBanco;
+		}
+
+		throw new PedidoNaoEncontradoException(pedido.getCodigoPedido());
+	}
+
+}
