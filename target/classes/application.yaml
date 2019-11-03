@@ -1,9 +1,0 @@
-spring:
-  data:
-    mongodb:
-      username: admin
-      database: jeoas
-      port: 27017
-      host: localhost
- 
-    
