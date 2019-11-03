@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.jeoas.angularboot.document.Credenciamento;
 import br.com.jeoas.angularboot.document.Pedido;
+import br.com.jeoas.angularboot.helper.PedidoHelperTest;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -46,7 +47,7 @@ public class PedidoControllerTest {
 	@Test
 	public void testarSalvarPedidoComSucesso() {
 		ResponseEntity<Pedido> resultado = restTemplate.postForEntity("/pedidos",
-				new Pedido("656459514564", "REFUND", new Credenciamento("4564564")), Pedido.class);
+				new Pedido(PedidoHelperTest.codigo(), "REFUND", new Credenciamento(PedidoHelperTest.codigo())), Pedido.class);
 		assertEquals(resultado.getStatusCode(), HttpStatus.OK);
 		assertNotNull(resultado.getBody().getCodigoPedido());
 	}

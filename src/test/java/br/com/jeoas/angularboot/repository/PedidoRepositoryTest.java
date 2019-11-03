@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.jeoas.angularboot.document.Credenciamento;
 import br.com.jeoas.angularboot.document.Pedido;
+import br.com.jeoas.angularboot.helper.PedidoHelperTest;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -27,7 +28,7 @@ public class PedidoRepositoryTest {
     
 	@Test
 	public void salvarPedidoComSucesso() {
-		Pedido pedido = new Pedido(getCodigoAleatorio(),"REFUND", new Credenciamento(getCodigoAleatorio()));
+		Pedido pedido = new Pedido(PedidoHelperTest.codigo(),"REFUND", new Credenciamento(PedidoHelperTest.codigo()));
 	
 		mongoTemplate.save(pedido);
 
@@ -37,7 +38,4 @@ public class PedidoRepositoryTest {
 		assertEquals(pedido.getCredenciamento().getCodigo(), pedidoBanco.getCredenciamento().getCodigo());
 	}
 	
-	private String getCodigoAleatorio() {
-		return  ("" + (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L).substring(0, 10);
-	}
 }
